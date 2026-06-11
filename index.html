@@ -11,13 +11,16 @@
             theme: {
                 extend: {
                     colors: {
-                        deepBlueBg: '#020617',
-                        deepBlueSurface: '#0b1329',
-                        deepBlueCard: '#1c2541',
-                        accentRed: '#ef4444',
-                        accentCyan: '#38bdf8',
-                        textWhite: '#f8fafc',
-                        textGray: '#94a3b8'
+                        deepBlueBg: 'var(--color-bg)',
+                        deepBlueSurface: 'var(--color-surface)',
+                        deepBlueCard: 'var(--color-card)',
+                        accentRed: 'var(--color-accent)',
+                        accentCyan: 'var(--color-cyan)',
+                        textWhite: 'var(--color-text-primary)',
+                        textGray: 'var(--color-text-secondary)',
+                        customBorder: 'var(--color-border)',
+                        customSubBg: 'var(--color-sub-bg)',
+                        customPanel: 'var(--color-panel)'
                     }
                 }
             }
@@ -32,11 +35,65 @@
     <!-- Hls.js Stable Library -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8/dist/hls.min.js"></script>
     <style>
+        :root {
+            /* DEEP BLUE (Default Theme) */
+            --color-bg: #020617;
+            --color-surface: #0b1329;
+            --color-card: #1c2541;
+            --color-accent: #ef4444;
+            --color-cyan: #38bdf8;
+            --color-text-primary: #f8fafc;
+            --color-text-secondary: #94a3b8;
+            --color-border: #1e293b;
+            --color-sub-bg: #0f172a;
+            --color-panel: #020617;
+        }
+
+        body.theme-deepblue {
+            --color-bg: #020617;
+            --color-surface: #0b1329;
+            --color-card: #1c2541;
+            --color-accent: #ef4444;
+            --color-cyan: #38bdf8;
+            --color-text-primary: #f8fafc;
+            --color-text-secondary: #94a3b8;
+            --color-border: #1e293b;
+            --color-sub-bg: #0f172a;
+            --color-panel: #020617;
+        }
+
+        body.theme-midnight {
+            --color-bg: #000000;
+            --color-surface: #09090b;
+            --color-card: #18181b;
+            --color-accent: #ef4444;
+            --color-cyan: #06b6d4;
+            --color-text-primary: #fafafa;
+            --color-text-secondary: #a1a1aa;
+            --color-border: #27272a;
+            --color-sub-bg: #09090b;
+            --color-panel: #000000;
+        }
+
+        body.theme-light {
+            --color-bg: #f8fafc;
+            --color-surface: #ffffff;
+            --color-card: #f1f5f9;
+            --color-accent: #dc2626;
+            --color-cyan: #0284c7;
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #475569;
+            --color-border: #cbd5e1;
+            --color-sub-bg: #e2e8f0;
+            --color-panel: #ffffff;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #020617;
-            color: #f8fafc;
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         h1, h2, h3, h4 {
             font-family: 'Space Grotesk', sans-serif;
@@ -50,37 +107,60 @@
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #020617;
+            background: var(--color-bg);
         }
         ::-webkit-scrollbar-thumb {
-            background: #1e293b;
+            background: var(--color-border);
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #ef4444;
+            background: var(--color-accent);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col justify-between theme-deepblue">
 
     <!-- TOP HEADER -->
-    <header class="border-b border-slate-800 bg-deepBlueBg/80 backdrop-blur-md sticky top-0 z-30">
+    <header class="border-b border-customBorder bg-deepBlueBg/80 backdrop-blur-md sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="p-2 bg-gradient-to-tr from-red-600 to-amber-500 rounded-lg flex items-center justify-center shadow-lg shadow-red-500/20">
+                <div class="p-2 bg-gradient-to-tr from-accentRed to-amber-500 rounded-lg flex items-center justify-center shadow-lg shadow-accentRed/20">
                     <i data-lucide="tv" class="w-6 h-6 text-white"></i>
                 </div>
                 <div>
                     <div class="flex items-center space-x-2">
-                        <span class="text-[10px] uppercase tracking-wider font-bold text-red-500 bg-red-950/40 px-2 py-0.5 rounded border border-red-800/30">HLS STREAM WEB APLET</span>
+                        <span class="text-[10px] uppercase tracking-wider font-bold text-accentRed bg-accentRed/10 px-2 py-0.5 rounded border border-accentRed/20">HLS STREAM WEB APLET</span>
                     </div>
                     <h1 class="text-lg font-bold text-textWhite leading-tight">PAVEL IPTV PLAYER</h1>
                 </div>
             </div>
 
-            <!-- Header elements -->
-            <div class="flex items-center space-x-3 text-xs text-textGray">
-                <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-2"></span>Stable Stream Server</span>
+            <!-- Header elements and Theme Swapper -->
+            <div class="flex items-center space-x-4 text-xs text-textGray">
+                <span class="hidden md:flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-2"></span>Stable Stream Server</span>
+                
+                <!-- THEME SELECTOR DROPDOWN -->
+                <div class="relative inline-block text-left text-textWhite font-semibold">
+                    <button onclick="toggleThemeDropdown(event)" class="flex items-center space-x-2 bg-customSubBg border border-customBorder rounded-xl px-3 py-2 cursor-pointer hover:border-accentRed transition-all focus:outline-none">
+                        <i data-lucide="palette" class="w-4 h-4 text-accentRed"></i>
+                        <span id="current-theme-label" class="text-xs">Deep Blue</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3 text-textGray"></i>
+                    </button>
+                    <div id="theme-dropdown-options" class="hidden absolute right-0 mt-2 w-48 bg-deepBlueSurface border border-customBorder rounded-xl shadow-2xl z-50 overflow-hidden shrink-0">
+                        <button onclick="selectTheme('deepblue')" class="w-full text-left px-4 py-2.5 text-xs hover:bg-customSubBg text-textWhite flex items-center space-x-2 border-b border-customBorder/50 font-medium transition-colors">
+                            <span class="w-3 h-3 rounded-full bg-indigo-900 border border-indigo-400"></span>
+                            <span>Deep Blue</span>
+                        </button>
+                        <button onclick="selectTheme('midnight')" class="w-full text-left px-4 py-2.5 text-xs hover:bg-customSubBg text-textWhite flex items-center space-x-2 border-b border-customBorder/50 font-medium transition-colors">
+                            <span class="w-3 h-3 rounded-full bg-black border border-zinc-700"></span>
+                            <span>Midnight Black</span>
+                        </button>
+                        <button onclick="selectTheme('light')" class="w-full text-left px-4 py-2.5 text-xs hover:bg-customSubBg text-textWhite flex items-center space-x-2 font-medium transition-colors">
+                            <span class="w-3 h-3 rounded-full bg-white border border-slate-300"></span>
+                            <span>Light Mode</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -88,11 +168,11 @@
     <!-- MAIN PLATFORM CONTENT -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full space-y-6">
 
-        <!-- SETUP M3U/M3U8 PLAYLIST INPUT (Unified Setup, no limitations, no warnings, no viewport locks!) -->
-        <div class="bg-deepBlueSurface border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+        <!-- SETUP M3U/M3U8 PLAYLIST INPUT -->
+        <div class="bg-deepBlueSurface border border-customBorder rounded-2xl p-5 shadow-xl space-y-4">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div class="flex items-center space-x-3">
-                    <div class="p-2.5 bg-slate-900 rounded-xl flex items-center justify-center text-red-500">
+                    <div class="p-2.5 bg-customSubBg rounded-xl flex items-center justify-center text-accentRed">
                         <i data-lucide="link" class="w-5 h-5"></i>
                     </div>
                     <div>
@@ -100,7 +180,7 @@
                         <p class="text-xs text-textGray">Input any standard M3U/M3U8 index link or direct stream source to parse and sync all live channels immediately</p>
                     </div>
                 </div>
-                <div class="text-[11px] font-mono text-red-400 bg-red-950/20 px-2.5 py-1 rounded border border-red-800/30 self-start md:self-auto">
+                <div class="text-[11px] font-mono text-accentRed bg-accentRed/10 px-2.5 py-1 rounded border border-accentRed/20 self-start md:self-auto">
                     Direct Playback Enabled
                 </div>
             </div>
@@ -108,9 +188,9 @@
             <div class="flex flex-col md:flex-row gap-3">
                 <div class="flex-grow relative">
                     <span class="absolute left-3.5 top-3.5 text-textGray"><i data-lucide="link-2" class="w-4 h-4"></i></span>
-                    <input id="playlist-url-input" type="text" placeholder="Paste your playlist URL here (e.g., https://raw.githubusercontent.com/.../playlist.m3u8)" class="w-full bg-deepBlueBg border border-slate-700 rounded-xl py-3 pl-10 pr-4 text-sm text-textWhite placeholder-slate-500 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500/20 transition-all font-mono">
+                    <input id="playlist-url-input" type="text" placeholder="Paste your playlist URL here (e.g., https://raw.githubusercontent.com/.../playlist.m3u8)" class="w-full bg-deepBlueBg border border-customBorder rounded-xl py-3 pl-10 pr-4 text-sm text-textWhite placeholder-slate-500 focus:outline-none focus:border-accentRed focus:ring-1 focus:ring-accentRed/20 transition-all font-mono">
                 </div>
-                <button onclick="saveAndSyncM3uLink()" class="bg-red-600 hover:bg-red-700 text-textWhite font-semibold px-6 py-3 rounded-xl text-sm transition-all shadow-lg shadow-red-600/20 flex items-center justify-center space-x-2 shrink-0">
+                <button onclick="saveAndSyncM3uLink()" class="bg-accentRed hover:bg-red-700 text-textWhite font-semibold px-6 py-3 rounded-xl text-sm transition-all shadow-lg shadow-accentRed/20 flex items-center justify-center space-x-2 shrink-0">
                     <i data-lucide="refresh-cw" class="w-4 h-4"></i>
                     <span>Sync & Load channels</span>
                 </button>
@@ -121,12 +201,12 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <!-- LEFT COLUMN: STREAM CHANNELS LIST -->
-            <div class="lg:col-span-1 bg-deepBlueSurface border border-slate-800 rounded-2xl p-5 flex flex-col h-[650px] shadow-xl">
+            <div class="lg:col-span-1 bg-deepBlueSurface border border-customBorder rounded-2xl p-5 flex flex-col h-[650px] shadow-xl">
                 <!-- Search and Filters -->
                 <div class="space-y-4 mb-4">
                     <h2 class="text-xl font-bold tracking-tight">Channels Catalog</h2>
                     <div class="relative">
-                        <input oninput="filterChannels()" id="channel-search" type="text" placeholder="Search live channels..." class="w-full bg-deepBlueBg border border-slate-700 rounded-xl py-2.5 pl-10 pr-4 text-sm text-textWhite placeholder-slate-500 focus:outline-none focus:border-red-500 transition-colors">
+                        <input oninput="filterChannels()" id="channel-search" type="text" placeholder="Search live channels..." class="w-full bg-deepBlueBg border border-customBorder rounded-xl py-2.5 pl-10 pr-4 text-sm text-textWhite placeholder-slate-500 focus:outline-none focus:border-accentRed transition-colors">
                         <i data-lucide="search" class="w-4 h-4 text-textGray absolute left-3.5 top-3.5"></i>
                     </div>
 
@@ -141,9 +221,9 @@
                     <!-- Channels populated dynamically -->
                 </div>
 
-                <div class="mt-4 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-textGray">
+                <div class="mt-4 pt-4 border-t border-customBorder flex items-center justify-between text-xs text-textGray">
                     <span id="active-total-channels">7 channels loaded</span>
-                    <button onclick="clearCachePlaylist()" class="text-red-500 hover:text-red-400 flex items-center space-x-1 font-semibold">
+                    <button onclick="clearCachePlaylist()" class="text-accentRed hover:text-red-400 flex items-center space-x-1 font-semibold focus:outline-none">
                         <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
                         <span>Reset Cache</span>
                     </button>
@@ -154,15 +234,15 @@
             <div class="lg:col-span-2 flex flex-col space-y-6">
                 
                 <!-- YouTube style Custom Player Container -->
-                <div id="video-player-container" class="relative bg-black border border-slate-800 rounded-2xl overflow-hidden shadow-2xl aspect-video flex flex-col justify-between group">
+                <div id="video-player-container" class="relative bg-black border border-customBorder rounded-2xl overflow-hidden shadow-2xl aspect-video flex flex-col justify-between group">
                     
                     <!-- HTML5 Video Component (No default controls) -->
-                    <div class="absolute inset-0 z-0 bg-slate-950 flex items-center justify-center">
+                    <div class="absolute inset-0 z-0 bg-black flex items-center justify-center">
                         <video id="video-canvas" class="w-full h-full object-contain cursor-pointer" playsinline preload="auto"></video>
                         
                         <!-- Tap to play overlay when nothing is active -->
-                        <div id="video-default-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-950 text-center p-6 space-y-4 cursor-pointer" onclick="clickFirstChannel()">
-                            <div class="p-4 bg-red-600/10 border border-red-500/20 rounded-full text-red-500 animate-bounce">
+                        <div id="video-default-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-customPanel text-center p-6 space-y-4 cursor-pointer" onclick="clickFirstChannel()">
+                            <div class="p-4 bg-accentRed/10 border border-accentRed/25 rounded-full text-accentRed animate-bounce">
                                 <i data-lucide="play" class="w-8 h-8 fill-current"></i>
                             </div>
                             <div>
@@ -172,12 +252,12 @@
                         </div>
 
                         <!-- Buffer loader spinner -->
-                        <div id="video-loader" class="absolute inset-0 hidden bg-black/80 flex flex-col items-center justify-center space-y-3 z-10">
+                        <div id="video-loader" class="absolute inset-0 hidden bg-black/85 flex flex-col items-center justify-center space-y-3 z-10">
                             <div class="relative w-12 h-12">
-                                <div class="absolute inset-0 border-4 border-slate-800 rounded-full"></div>
-                                <div class="absolute inset-0 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                                <div class="absolute inset-0 border-4 border-customBorder rounded-full"></div>
+                                <div class="absolute inset-0 border-4 border-accentRed border-t-transparent rounded-full animate-spin"></div>
                             </div>
-                            <span class="text-xs text-red-500 font-bold tracking-wider animate-pulse uppercase">Buffering Hls.js stream ...</span>
+                            <span class="text-xs text-accentRed font-bold tracking-wider animate-pulse uppercase">Buffering Hls.js stream ...</span>
                         </div>
                     </div>
 
@@ -185,33 +265,33 @@
                     <div id="custom-controls" class="z-10 w-full p-4 bg-gradient-to-t from-black/95 via-black/50 to-transparent self-end opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 flex flex-col space-y-3 shrink-0">
                         
                         <!-- Timeline Seek Scrubber Row -->
-                        <div id="progress-container" class="relative w-full h-1 bg-slate-700/50 hover:h-2 rounded-full cursor-pointer transition-all flex items-center">
-                            <div id="buffered-progress-bar" class="absolute left-0 top-0 h-full bg-slate-400/30 rounded-full transition-all" style="width: 0%"></div>
-                            <div id="play-progress-bar" class="absolute left-0 top-0 h-full bg-red-600 rounded-full transition-all" style="width: 0%"></div>
-                            <div id="scrub-handle" class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-red-600 rounded-full shadow-lg scale-0 group-hover:scale-100 transition-all cursor-grab active:cursor-grabbing" style="left: 0%"></div>
+                        <div id="progress-container" class="relative w-full h-1 bg-white/20 hover:h-2 rounded-full cursor-pointer transition-all flex items-center">
+                            <div id="buffered-progress-bar" class="absolute left-0 top-0 h-full bg-white/30 rounded-full transition-all" style="width: 0%"></div>
+                            <div id="play-progress-bar" class="absolute left-0 top-0 h-full bg-accentRed rounded-full transition-all" style="width: 0%"></div>
+                            <div id="scrub-handle" class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-accentRed rounded-full shadow-lg scale-0 group-hover:scale-100 transition-all cursor-grab active:cursor-grabbing" style="left: 0%"></div>
                         </div>
 
                         <!-- Control Action Buttons Row -->
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
                                 <!-- Play/Pause toggle -->
-                                <button onclick="toggleVideoPlayback()" class="p-2 text-textWhite hover:text-red-500 transition-colors">
+                                <button onclick="toggleVideoPlayback()" class="p-2 text-white hover:text-accentRed transition-colors focus:outline-none">
                                     <i id="play-pause-icon" data-lucide="play" class="w-5 h-5 fill-current"></i>
                                 </button>
                                 
                                 <!-- Volume slide package -->
                                 <div class="flex items-center space-x-2" id="volume-area">
-                                    <button onclick="toggleMute()" class="p-2 text-textWhite hover:text-red-500 transition-colors">
+                                    <button onclick="toggleMute()" class="p-2 text-white hover:text-accentRed transition-colors focus:outline-none">
                                         <i id="volume-icon" data-lucide="volume-2" class="w-5 h-5"></i>
                                     </button>
-                                    <input id="volume-slider" oninput="adjustVolume(this.value)" type="range" min="0" max="1" step="0.05" value="1" class="w-16 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-red-600">
+                                    <input id="volume-slider" oninput="adjustVolume(this.value)" type="range" min="0" max="1" step="0.05" value="1" class="w-16 h-1 bg-white/30 rounded-lg appearance-none cursor-pointer accent-accentRed">
                                 </div>
 
                                 <!-- Time segment duration or LIVE label -->
-                                <div class="flex items-center space-x-2 text-xs font-semibold tracking-tight text-textGray">
+                                <div class="flex items-center space-x-2 text-xs font-semibold tracking-tight text-white/70">
                                     <span id="player-time-display">0:00 / 0:00</span>
-                                    <span id="player-live-badge" class="hidden items-center text-[10px] text-red-500 uppercase bg-red-950/30 border border-red-900/30 px-1.5 py-0.5 rounded">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse mr-1"></span>LIVE
+                                    <span id="player-live-badge" class="hidden items-center text-[10px] text-accentRed uppercase bg-accentRed/20 border border-accentRed/30 px-1.5 py-0.5 rounded">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-accentRed animate-pulse mr-1"></span>LIVE
                                     </span>
                                 </div>
                             </div>
@@ -219,22 +299,27 @@
                             <div class="flex items-center space-x-3">
                                 <!-- Now playing info -->
                                 <div class="text-right hidden sm:block">
-                                    <h4 id="now-playing-title" class="text-xs font-bold text-textWhite line-clamp-1 max-w-[150px] leading-tight">No Screen Selected</h4>
-                                    <span id="now-playing-category" class="text-[9px] text-red-500 font-semibold bg-red-950/40 border border-red-900/20 px-1.5 py-0.5 rounded">OFFLINE</span>
+                                    <h4 id="now-playing-title" class="text-xs font-bold text-white line-clamp-1 max-w-[150px] leading-tight">No Screen Selected</h4>
+                                    <span id="now-playing-category" class="text-[9px] text-accentRed font-semibold bg-accentRed/20 border border-accentRed/30 px-1.5 py-0.5 rounded">OFFLINE</span>
                                 </div>
 
                                 <!-- Speed Switcher -->
-                                <button onclick="changeSpeed()" id="speed-indicator" class="text-[10px] font-bold text-textWhite bg-slate-800 hover:bg-slate-700 border border-slate-700 px-2 py-1 rounded transition-colors uppercase">
+                                <button onclick="changeSpeed()" id="speed-indicator" class="text-[10px] font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-2 py-1 rounded transition-colors uppercase focus:outline-none">
                                     1.0x
                                 </button>
 
                                 <!-- Screen Fit aspects -->
-                                <button onclick="changeResizeMode()" class="p-2 text-textWhite hover:text-red-500 transition-colors" title="Change Screen Fit">
+                                <button onclick="changeResizeMode()" class="p-2 text-white hover:text-accentRed transition-colors focus:outline-none" title="Change Screen Fit">
                                     <i data-lucide="aspect-ratio" class="w-4 h-4"></i>
                                 </button>
 
+                                <!-- Picture-in-Picture Button -->
+                                <button id="pip-button" onclick="togglePictureInPicture()" class="p-2 text-white hover:text-accentRed transition-colors focus:outline-none" title="Picture in Picture">
+                                    <i data-lucide="picture-in-picture-2" class="w-5 h-5"></i>
+                                </button>
+
                                 <!-- Fullscreen icon -->
-                                <button onclick="toggleFullscreen()" class="p-2 text-textWhite hover:text-red-500 transition-colors">
+                                <button onclick="toggleFullscreen()" class="p-2 text-white hover:text-accentRed transition-colors focus:outline-none" title="Fullscreen">
                                     <i data-lucide="maximize" class="w-5 h-5"></i>
                                 </button>
                             </div>
@@ -244,16 +329,16 @@
                 </div>
 
                 <!-- DIAGNOSTIC CONSOLE & LOGS -->
-                <div class="bg-deepBlueSurface border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col h-[180px]">
+                <div class="bg-deepBlueSurface border border-customBorder rounded-2xl p-5 shadow-lg flex flex-col h-[180px]">
                     <div class="flex items-center justify-between mb-3 shrink-0">
                         <h3 class="text-sm font-bold text-textWhite flex items-center">
-                            <i data-lucide="terminal" class="w-4 h-4 text-red-500 mr-2"></i>
+                            <i data-lucide="terminal" class="w-4 h-4 text-accentRed mr-2"></i>
                             Engine Playback Tracker
                         </h3>
-                        <span class="text-[9px] tracking-wider text-red-500 uppercase font-bold bg-red-950/40 border border-red-900/30 px-2 py-0.5 rounded">AUTO-BYPASS ON</span>
+                        <span class="text-[9px] tracking-wider text-accentRed uppercase font-bold bg-accentRed/10 border border-accentRed/20 px-2 py-0.5 rounded">AUTO-BYPASS ON</span>
                     </div>
                     <!-- Terminal stream logs -->
-                    <div id="engine-logs" class="flex-grow overflow-y-auto bg-slate-950 rounded-xl p-3 text-[10px] mono-font text-red-400 space-y-1 border border-slate-900 whitespace-pre-wrap">
+                    <div id="engine-logs" class="flex-grow overflow-y-auto bg-customPanel rounded-xl p-3 text-[10px] mono-font text-accentRed space-y-1 border border-customBorder whitespace-pre-wrap">
 [Log] PAVEL IPTV web service loader fully operational.
 [Log] Direct decoder activation complete. No verification filters enforced.
 [Log] Paste any live .M3U streaming playlist link above and connect instantly.
@@ -266,10 +351,10 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="border-t border-slate-800 py-6 bg-deepBlueBg">
+    <footer class="border-t border-customBorder py-6 bg-deepBlueBg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-textGray">
             <div class="flex items-center space-x-2">
-                <span class="text-red-500 font-bold">PAVEL IPTV</span>
+                <span class="text-accentRed font-bold">PAVEL IPTV</span>
                 <span>• v2.1.0 High-Speed Web App</span>
             </div>
             <div class="flex items-center space-x-4">
@@ -342,7 +427,7 @@
         ];
 
         let defaultChannelsList = [...hardcodedDefaultChannels];
-        let activePlaylistUrl = localStorage.getItem('pavel_playlist_url') || 'https://iptv-org.github.io/iptv/index.m3u';
+        let activePlaylistUrl = localStorage.getItem('pavel_playlist_url') || 'https://iptv-org.github.io/iptv/countries/uk.m3u';
         let activeChannel = null;
         let hlsInstance = null;
         let selectedCategory = "All";
@@ -392,15 +477,15 @@
             const groups = new Set();
             defaultChannelsList.forEach(c => { if (c.group) groups.add(c.group); });
 
-            let html = `<button onclick="filterCategory('All')" class="px-3 py-1 rounded-full text-xs font-semibold ${selectedCategory === 'All' ? 'bg-red-600 text-white' : 'bg-slate-800 text-textGray hover:text-textWhite'} transition-all" data-category="All">All</button>`;
+            let html = `<button onclick="filterCategory('All')" class="px-3 py-1 rounded-full text-xs font-semibold ${selectedCategory === 'All' ? 'bg-accentRed text-white' : 'bg-customSubBg text-textGray hover:text-textWhite border border-customBorder/40'} transition-all" data-category="All">All</button>`;
             
             groups.forEach(g => {
                 const sel = selectedCategory === g;
-                html += `<button onclick="filterCategory('${g}')" class="px-3 py-1 rounded-full text-xs font-semibold ${sel ? 'bg-red-600 text-white' : 'bg-slate-800 text-textGray hover:text-textWhite'} transition-all" data-category="${g}">${g}</button>`;
+                html += `<button onclick="filterCategory('${g}')" class="px-3 py-1 rounded-full text-xs font-semibold ${sel ? 'bg-accentRed text-white' : 'bg-customSubBg text-textGray hover:text-textWhite border border-customBorder/40'} transition-all" data-category="${g}">${g}</button>`;
             });
 
             const favSel = selectedCategory === 'Favorites';
-            html += `<button onclick="filterCategory('Favorites')" class="px-3 py-1 rounded-full text-xs font-semibold ${favSel ? 'bg-red-600 text-white' : 'bg-slate-800 text-yellow-500 hover:text-yellow-400'} transition-all" data-category="Favorites">⭐️ Stars</button>`;
+            html += `<button onclick="filterCategory('Favorites')" class="px-3 py-1 rounded-full text-xs font-semibold ${favSel ? 'bg-accentRed text-white' : 'bg-customSubBg text-yellow-500 hover:text-yellow-400 border border-yellow-500/20'} transition-all" data-category="Favorites">⭐️ Stars</button>`;
 
             container.innerHTML = html;
         }
@@ -421,7 +506,7 @@
             document.getElementById('active-total-channels').innerText = `${filtered.length} Live Channels Loaded`;
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="text-center py-12 text-slate-500 text-xs">No channels found matching.</div>`;
+                container.innerHTML = `<div class="text-center py-12 text-textGray text-xs font-medium">No channels found matching.</div>`;
                 return;
             }
 
@@ -431,12 +516,12 @@
 
                 const item = document.createElement('div');
                 item.className = `p-2.5 rounded-xl flex items-center justify-between cursor-pointer border transition-all ${
-                    isActive ? 'bg-red-500/10 border-red-500/30' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                    isActive ? 'bg-accentRed/10 border-accentRed/30 shadow-sm shadow-accentRed/5' : 'bg-customSubBg/60 border-customBorder hover:border-accentRed/40'
                 }`;
 
                 item.innerHTML = `
                     <div onclick="selectAndPlay('${c.id}')" class="flex items-center space-x-3 flex-grow overflow-hidden">
-                        <div class="w-8 h-8 rounded-lg bg-white overflow-hidden flex items-center justify-center shrink-0 border border-slate-700">
+                        <div class="w-8 h-8 rounded-lg bg-white overflow-hidden flex items-center justify-center shrink-0 border border-customBorder">
                             <img src="${c.logo}" alt="" class="w-full h-full object-contain p-0.5" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg'">
                         </div>
                         <div class="text-left overflow-hidden">
@@ -445,7 +530,7 @@
                         </div>
                     </div>
                     <button onclick="toggleFavorite(event, '${c.id}')" class="p-1 px-1.5 rounded-lg border transition-all shrink-0 ${
-                        isFav ? 'border-yellow-600 bg-yellow-950/20 text-yellow-500' : 'border-slate-800 text-slate-500 hover:text-textWhite'
+                        isFav ? 'border-yellow-500/50 bg-yellow-500/10 text-yellow-500' : 'border-customBorder text-textGray hover:text-accentRed'
                     }">
                         <i data-lucide="star" class="w-3.5 h-3.5" ${isFav ? 'style="fill: currentColor;"' : ''}></i>
                     </button>
@@ -559,6 +644,25 @@
 
         // Tap on video canvas
         video.addEventListener('click', toggleVideoPlayback);
+
+        // Picture-in-Picture event listeners
+        video.addEventListener('enterpictureinpicture', () => {
+            appendConsoleLog("Entered Picture-in-Picture mode.");
+            const pipBtn = document.getElementById('pip-button');
+            if (pipBtn) {
+                pipBtn.classList.add('text-accentRed');
+                pipBtn.classList.remove('text-white');
+            }
+        });
+
+        video.addEventListener('leavepictureinpicture', () => {
+            appendConsoleLog("Exited Picture-in-Picture mode.");
+            const pipBtn = document.getElementById('pip-button');
+            if (pipBtn) {
+                pipBtn.classList.remove('text-accentRed');
+                pipBtn.classList.add('text-white');
+            }
+        });
 
         // Volume logic
         function adjustVolume(val) {
@@ -677,6 +781,28 @@
             }
         }
 
+        // Picture-in-Picture toggle
+        async function togglePictureInPicture() {
+            if (!document.pictureInPictureEnabled) {
+                appendConsoleLog("Picture-in-Picture is not supported in this browser.");
+                return;
+            }
+
+            try {
+                if (document.pictureInPictureElement) {
+                    await document.exitPictureInPicture();
+                } else {
+                    if (video.readyState === 0) {
+                        appendConsoleLog("Cannot enter Picture-in-Picture: No video stream loaded.");
+                        return;
+                    }
+                    await video.requestPictureInPicture();
+                }
+            } catch (error) {
+                appendConsoleLog(`Picture-in-Picture error: ${error.message}`);
+            }
+        }
+
         // Keyboard commands
         window.addEventListener('keydown', (e) => {
             if (document.activeElement && (document.activeElement.tagName === 'INPUT')) return;
@@ -688,6 +814,8 @@
                 toggleMute();
             } else if (key === 'f') {
                 toggleFullscreen();
+            } else if (key === 'p') {
+                togglePictureInPicture();
             }
         });
 
@@ -913,22 +1041,66 @@
             }
         }
 
+        // Theme Management Functions
+        let activeTheme = localStorage.getItem('pavel_theme') || 'deepblue';
+
+        function applyTheme(theme) {
+            document.body.className = `min-h-screen flex flex-col justify-between theme-${theme}`;
+            localStorage.setItem('pavel_theme', theme);
+            
+            // Update UI dropdown text indicator
+            const label = document.getElementById('current-theme-label');
+            if (label) {
+                if (theme === 'deepblue') label.innerText = 'Deep Blue';
+                else if (theme === 'midnight') label.innerText = 'Midnight Black';
+                else if (theme === 'light') label.innerText = 'Light Mode';
+            }
+            appendConsoleLog(`Theme preference activated: ${theme.toUpperCase()}`);
+        }
+
+        function selectTheme(theme) {
+            applyTheme(theme);
+            const el = document.getElementById('theme-dropdown-options');
+            if (el) el.classList.add('hidden');
+        }
+
+        function toggleThemeDropdown(event) {
+            event.stopPropagation();
+            const el = document.getElementById('theme-dropdown-options');
+            if (el) {
+                el.classList.toggle('hidden');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', () => {
+            const el = document.getElementById('theme-dropdown-options');
+            if (el) el.classList.add('hidden');
+        });
+
         // Initialize App
         async function init() {
-            document.getElementById('playlist-url-input').value = activePlaylistUrl;
-            await loadStoredChannels();
+            applyTheme(activeTheme);
             
-            const everLoaded = localStorage.getItem('pavel_ever_loaded_m3u');
-            if (!everLoaded && activePlaylistUrl === 'https://iptv-org.github.io/iptv/index.m3u') {
-                appendConsoleLog("First run default initialization. Syncing default M3U playlist feed...");
-                localStorage.setItem('pavel_ever_loaded_m3u', 'true');
+            const everLoadedUk = localStorage.getItem('pavel_ever_loaded_m3u_uk');
+            if (!everLoadedUk) {
+                activePlaylistUrl = 'https://iptv-org.github.io/iptv/countries/uk.m3u';
+                localStorage.setItem('pavel_playlist_url', activePlaylistUrl);
+                localStorage.setItem('pavel_ever_loaded_m3u_uk', 'true');
+                document.getElementById('playlist-url-input').value = activePlaylistUrl;
+                
+                appendConsoleLog("Initial UK playlist setup. Auto-syncing United Kingdom M3U feed...");
                 setTimeout(() => {
                     saveAndSyncM3uLinkOnStart(activePlaylistUrl);
                 }, 1000);
-            } else {
-                renderCategoryTabs();
-                renderChannelsList();
+                return;
             }
+
+            document.getElementById('playlist-url-input').value = activePlaylistUrl;
+            await loadStoredChannels();
+            
+            renderCategoryTabs();
+            renderChannelsList();
         }
         init();
     </script>
