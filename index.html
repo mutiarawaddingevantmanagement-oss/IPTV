@@ -342,7 +342,7 @@
         ];
 
         let defaultChannelsList = [...hardcodedDefaultChannels];
-        let activePlaylistUrl = localStorage.getItem('pavel_playlist_url') || '';
+        let activePlaylistUrl = localStorage.getItem('pavel_playlist_url') || 'https://iptv-org.github.io/iptv/index.m3u';
         let activeChannel = null;
         let hlsInstance = null;
         let selectedCategory = "All";
@@ -465,6 +465,15 @@
         function selectAndPlay(id) {
             const ch = defaultChannelsList.find(c => c.id === id);
             if (!ch) return;
+
+            // If the URL ends with .m3u (but not .m3u8), it's another playlist!
+            // Let's load and sync it automatically so they can browse it recursively!
+            if (ch.url.toLowerCase().endsWith('.m3u') && !ch.url.toLowerCase().endsWith('.m3u8')) {
+                appendConsoleLog(`Nested playlist detected: ${ch.url}. Seamlessly loading sub-playlist...`);
+                document.getElementById('playlist-url-input').value = ch.url;
+                saveAndSyncM3uLink();
+                return;
+            }
 
             activeChannel = ch;
             defaultOverlay.classList.add('hidden');
@@ -867,12 +876,59 @@
             });
         }
 
+        async function saveAndSyncM3uLinkOnStart(urlVal) {
+            appendConsoleLog(`First run auto-sync playlist: ${urlVal}`);
+            const isDirect = urlVal.toLowerCase().includes('.m3u8') || 
+                             urlVal.toLowerCase().includes('.ts') || 
+                             urlVal.toLowerCase().includes('.mp4') || 
+                             urlVal.toLowerCase().includes('playlist') ||
+                             urlVal.toLowerCase().includes('.m3u');
+
+            try {
+                const text = await fetchAndParseM3U(urlVal);
+                let parsedList = parseM3uText(text);
+                if (parsedList.length === 0) {
+                    if (isDirect) {
+                        appendConsoleLog("Link parses zero items but matches direct stream formats. Activating raw stream builder.");
+                        parsedList = createSingleFallbackChannel(urlVal);
+                    } else {
+                        throw new Error("No channels found inside M3U text container.");
+                    }
+                }
+                
+                defaultChannelsList = parsedList;
+                await setDBValue('pavel_channels_list', defaultChannelsList);
+                localStorage.setItem('pavel_playlist_url', urlVal);
+                selectedCategory = "All";
+                renderCategoryTabs();
+                renderChannelsList();
+                appendConsoleLog(`Database Sync: Successfully auto-stored ${parsedList.length} items to memory.`);
+                if (parsedList.length > 0) {
+                    selectAndPlay(parsedList[0].id);
+                }
+            } catch (err) {
+                appendConsoleLog(`Auto Sync failure: ${err.message}`);
+                renderCategoryTabs();
+                renderChannelsList();
+            }
+        }
+
         // Initialize App
         async function init() {
             document.getElementById('playlist-url-input').value = activePlaylistUrl;
             await loadStoredChannels();
-            renderCategoryTabs();
-            renderChannelsList();
+            
+            const everLoaded = localStorage.getItem('pavel_ever_loaded_m3u');
+            if (!everLoaded && activePlaylistUrl === 'https://iptv-org.github.io/iptv/index.m3u') {
+                appendConsoleLog("First run default initialization. Syncing default M3U playlist feed...");
+                localStorage.setItem('pavel_ever_loaded_m3u', 'true');
+                setTimeout(() => {
+                    saveAndSyncM3uLinkOnStart(activePlaylistUrl);
+                }, 1000);
+            } else {
+                renderCategoryTabs();
+                renderChannelsList();
+            }
         }
         init();
     </script>
